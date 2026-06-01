@@ -1,5 +1,7 @@
 #include "../include/DeviceFactory.h"
 #include "../include/Logger.h"
+#include <memory>
+#include <string>
 
 //Google  nest
 
@@ -32,6 +34,16 @@ class NestThermostat : public Thermostat{
     }
     void setTemperature(float temp) override{
         LOG_INFO("Nest Thermostat adjusting target to " + std::to_string(temp) + " degrees.");
+    }
+    void update(float newTemperature) override{
+        LOG_INFO("Nest Thermostat detected ambiet temp change to " + std::to_string(newTemperature)+ "°C");
+        if(newTemperature < 18.0f){
+            LOG_INFO("Nest: Too cold! Activating emergency heating.");
+            turnOn();
+        }else if(newTemperature > 25.0f){
+            LOG_INFO("Nest: Too hot! Activating AC.");
+            turnOff();
+        }
     }
 };
 
@@ -66,23 +78,30 @@ class AppleThermostat : public Thermostat{
     void setTemperature(float temp) override{
         LOG_INFO("Apple Climate synchronized to " + std::to_string(temp) + " degrees.");
     }
+    void update(float newTemperature) override{
+        LOG_INFO("Apple iClimate sensor sync: " + std::to_string(newTemperature) + "°C");
+        if(newTemperature < 20.0f){
+            LOG_INFO("Apple: Optimal temp lost. Warming environment.");
+            turnOn();
+        }
+    }
 };
 
 //Factory implementation
 
-std::unique_ptr<Light> GoogleNestFactory::createLight() {
+std::shared_ptr<Light> GoogleNestFactory::createLight() {
     LOG_DEBUG("GoogleNestFactory manufacturing a NestLight.");
-    return std::make_unique<NestLight>();
+    return std::make_shared<NestLight>();
 }
-std::unique_ptr<Thermostat> GoogleNestFactory::createThermostat() {
+std::shared_ptr<Thermostat> GoogleNestFactory::createThermostat() {
     LOG_DEBUG("GoogleNestFactory manufacturing a NestThermostat.");
-    return std::make_unique<NestThermostat>();
+    return std::make_shared<NestThermostat>();
 }
-std::unique_ptr<Light> AppleHomeKitEcosystem::createLight() {
+std::shared_ptr<Light> AppleHomeKitEcosystem::createLight() {
     LOG_DEBUG("AppleHomeKitFactory manufacturing an AppleLight.");
-    return std::make_unique<AppleLight>();
+    return std::make_shared<AppleLight>();
 }
-std::unique_ptr<Thermostat>  AppleHomeKitEcosystem::createThermostat(){
+std::shared_ptr<Thermostat>  AppleHomeKitEcosystem::createThermostat(){
     LOG_DEBUG("AppleHomeKitFactory manufacturing an AppleThermostat.");
-     return std::make_unique<AppleThermostat>();
+     return std::make_shared<AppleThermostat>();
 }

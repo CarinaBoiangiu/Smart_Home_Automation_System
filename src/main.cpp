@@ -1,7 +1,7 @@
 #include "../include/Logger.h"
 #include "../include/DeviceFactory.h"
+#include "../include/Sensor.h"
 #include <thread>
-#include <vector>
 #include <string>
 #include <chrono>
 
@@ -39,27 +39,24 @@ int main(){
     Logger::getInstance().setLogFile("smarthone.log");
     LOG_INFO("=== Smart Home Central Hub Starting ===");
 
-    // std::vector<std::thread> deviceThreads;
+    TemperatureSensor houseSensor;
+    houseSensor.startSimulation();
 
-    // for(int i = 1; i <= 10; ++i){
-    //     deviceThreads.push_back(std::thread(simulateDeviceActivity, i));
-    // }
-
-    // for(auto& t : deviceThreads){
-    //     if(t.joinable()){
-    //         t.join();
-    //     }
-    // }
-    LOG_INFO("--- Setting up Downstairs (Google) ----");
     GoogleNestFactory googleEcosystem;
-    provisionSmartRoom(googleEcosystem, "Living Room");
+    auto livingRoomThermostat = googleEcosystem.createThermostat();
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
-    LOG_INFO("--- Setting up  Upstairs (Apple) ---");
     AppleHomeKitEcosystem appleEcosystem;
-    provisionSmartRoom(appleEcosystem, "Master Bedroom");
+    auto bedroomThermostat = appleEcosystem.createThermostat();
 
+    houseSensor.attach(livingRoomThermostat);
+    houseSensor.attach(bedroomThermostat);
+
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+
+    LOG_WARNING("MAIN THREAD: Destroying Bedroom Thermostat unexpectedly!");
+    bedroomThermostat.reset();
+
+    houseSensor.stopSimulation();
     LOG_INFO("=== Smart Home  Central Hub Shutdown Complete ===");
 
     return 0;

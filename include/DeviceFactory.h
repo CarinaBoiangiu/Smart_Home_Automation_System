@@ -9,23 +9,23 @@ class IEcosystemFactory{
     public:
         virtual ~IEcosystemFactory() = default;
 
-        virtual std::unique_ptr<Light> createLight() = 0;
-        virtual std::unique_ptr<Thermostat> createThermostat() = 0;
+        virtual std::shared_ptr<Light> createLight() = 0;
+        virtual std::shared_ptr<Thermostat> createThermostat() = 0;
 
 };
 
 // Factory 1 :  GoogleNestFactory
 class GoogleNestFactory : public IEcosystemFactory{
     public:
-        std::unique_ptr<Light> createLight() override;
-        std::unique_ptr<Thermostat> createThermostat() override;
+        std::shared_ptr<Light> createLight() override;
+        std::shared_ptr<Thermostat> createThermostat() override;
 };
 
 //Factory 2 : Apple HomeKit Ecosystem
 class AppleHomeKitEcosystem : public IEcosystemFactory{
     public:
-        std::unique_ptr<Light> createLight() override;
-        std::unique_ptr<Thermostat> createThermostat() override;
+        std::shared_ptr<Light> createLight() override;
+        std::shared_ptr<Thermostat> createThermostat() override;
 };
 
 #endif //DEVICE_FACTORY_H_

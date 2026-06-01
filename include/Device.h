@@ -1,6 +1,7 @@
 #ifndef DEVICE_H_
 #define DEVICE_H_
 
+#include "Observer.h"
 #include <string>
 
 class Device{
@@ -16,7 +17,7 @@ class Light : public Device{
         virtual void setBrightness(int level) = 0;
 };
 
-class Thermostat : public Device{
+class Thermostat : public Device, public IObserver{
     public:
         virtual  void setTemperature(float temp) = 0;
 };
