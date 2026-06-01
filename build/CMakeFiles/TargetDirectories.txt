@@ -1,3 +1,0 @@
-/home/carina/Added/CPP_LEARN/Smart_Home_Automation_System/build/CMakeFiles/SmartHomeSimulator.dir
-/home/carina/Added/CPP_LEARN/Smart_Home_Automation_System/build/CMakeFiles/edit_cache.dir
-/home/carina/Added/CPP_LEARN/Smart_Home_Automation_System/build/CMakeFiles/rebuild_cache.dir

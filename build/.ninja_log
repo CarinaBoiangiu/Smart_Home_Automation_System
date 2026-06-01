@@ -1,7 +1,0 @@
-# ninja log v5
-2	43	1780297669121319325	CMakeFiles/SmartHomeSimulator.dir/src/DeviceFactory.cpp.o	5d513297b3fcb139
-3	44	1780297669121319325	CMakeFiles/SmartHomeSimulator.dir/src/Sensor.cpp.o	1ee52effd888077a
-3	44	1780297669121319325	CMakeFiles/SmartHomeSimulator.dir/src/HomeFacade.cpp.o	987cafd41fea7e1a
-2	440	1780297669541308518	CMakeFiles/SmartHomeSimulator.dir/src/Logger.cpp.o	ab169e2ab938a18b
-1	489	1780297669590307258	CMakeFiles/SmartHomeSimulator.dir/src/main.cpp.o	b6969ca52a2d13ac
-489	544	1780297669643305894	SmartHomeSimulator	35d800da47df3ff3
