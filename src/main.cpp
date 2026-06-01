@@ -1,8 +1,6 @@
 #include "../include/Logger.h"
-#include "../include/DeviceFactory.h"
-#include "../include/Sensor.h"
+#include "../include/HomeFacade.h"
 #include <thread>
-#include <string>
 #include <chrono>
 
 
@@ -37,27 +35,24 @@ void simulateDeviceActivity(int deviceId){
 
 int main(){
     Logger::getInstance().setLogFile("smarthone.log");
-    LOG_INFO("=== Smart Home Central Hub Starting ===");
+    LOG_INFO("=== System Boot ===");
 
-    TemperatureSensor houseSensor;
-    houseSensor.startSimulation();
+    SmartHomeFacade myHouse;
 
-    GoogleNestFactory googleEcosystem;
-    auto livingRoomThermostat = googleEcosystem.createThermostat();
+    myHouse.initializeEcosystem("Apple");
+    myHouse.startSensors();
 
-    AppleHomeKitEcosystem appleEcosystem;
-    auto bedroomThermostat = appleEcosystem.createThermostat();
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    myHouse.triggerMorningRoutine();
 
-    houseSensor.attach(livingRoomThermostat);
-    houseSensor.attach(bedroomThermostat);
+    std::this_thread::sleep_for(std::chrono::seconds(4));
 
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    myHouse.triggerEveningRoutine();
 
-    LOG_WARNING("MAIN THREAD: Destroying Bedroom Thermostat unexpectedly!");
-    bedroomThermostat.reset();
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 
-    houseSensor.stopSimulation();
-    LOG_INFO("=== Smart Home  Central Hub Shutdown Complete ===");
+    myHouse.stopSensors();
+    LOG_INFO("=== System Shutdown ===");
 
     return 0;
 }
